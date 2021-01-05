@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<title>Online Exam Service | Make Exam Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<script type="application/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+<style>
+    body, h1, h5 {
+        font-family: "Raleway", sans-serif
+    }
+
+    body, html {
+        height: 100%
+    }
+
+    body {
+        background-image: url("https://q3p9g6n2.rocketcdn.me/wp-content/ml-loads/2014/06/test-quiz-shutterstock-e1420659305719.jpg");
+        background-repeat: repeat-y;
+    }
+
+    p {
+        color: #2f3c7e;
+        /*background-color:#2f3c7e ;*/
+    }
+
+    .button {
+        background-color: #2f3c7e;
+        color: #f0a07c;
+        border: none;
+        resize: none;
+        padding: 15px 40px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        transition: 0.7s;
+
+    }
+
+    .button:hover {
+        transition: 0.7s;
+        background-color: #f4af1b;
+        color: #00154f;
+
+    }
+
+
+    .bgimg {
+        background-color: #1efb6e;
+        background-image: url("https://q3p9g6n2.rocketcdn.me/wp-content/ml-loads/2014/06/test-quiz-shutterstock-e1420659305719.jpg");
+        min-height: 100%;
+        background-position: center;
+        background-size: cover;
+        background-repeat: repeat;
+    }
+
+    form {
+        background-color: #00154f;
+        border: 1px solid black;
+
+        padding: 100px;
+        position: absolute;
+        top: 20cm;
+        left: 50%;
+        transform: translate(-50%, -80%);
+        float: bottom;
+        
+    }
+
+    input[type=number], input[type=text] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    label {
+        color: #f4af1b;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    #submitButton{
+        background-color: #f4af1b;
+        color: black;
+        padding: 12px 60px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+
+</style>
+<body onload="loadForm()">
+
+<div class="bgimg w3-display-container w3-text-white">
+    <div class="w3-display-middle w3-jumbo">
+        <!--                <p>Online Exam Service</p>-->
+    </div>
+
+    <form>
+        <div class="">
+            <div>
+                <div style="" id="qdDiv">
+                    <label></label>
+                </div>
+                <br>
+                                <a id="submitButton" onclick="send()">Submit</a>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="w3-display-topleft w3-container w3-xlarge">
+        <p>
+            <a href="/logout" class="button">LogOut</a>
+        </p>
+
+        <p>
+            <a href="/index" class="button">Home</a>
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+<script type="application/javascript">
+
+    function loadForm() {
+        var examId = window.location.search.substring(1);
+        loadExam(examId)
+    }
+
+    function loadExam(examId) {
+        $.get("/exam/" +examId , function (data) {
+            $("label").append(data);
+            $("label").append("<hr>");
+
+        });
+        $.get("/exam/" + examId+"/questions", function (data) {
+
+            $("label").append("<br>");
+            for (var i = 0; i < data.length; i++) {
+                var rdname = "option" + i;
+                $("label").append(data[i].description);
+                $("label").append("<br>");
+                for (var j = 1; j < data.length; j++) {
+                    var radioBtn = $('<input type="radio" name="'+rdname+'" value="'+j+'"/>');
+                    radioBtn.name=rdname;
+                    radioBtn.appendTo("label");
+                    $("label").append("&nbsp;&nbsp;");
+                    $("label").append(data[i].options[j]);
+                    $("label").append("<br>");
+                }
+                $("label").append("<br>");
+            }
+        });
+    }
+
+    function send() {
+        var answers = [];
+        answers[0] =window.location.search.substring(1);
+        for (var i = 0 ; i <5;i++ )
+            answers[i+1] = $('input[name="option' + i + '"]:checked').val();
+        //TODO:Fix here
+        $.ajax({
+            type: "POST",
+            url: "/score/take",
+            data: JSON.stringify(answers),
+            dataType: "json",
+            contentType: "application/json",
+            statusCode: {200: alert("Answers sent")}
+        });
+    }
+
+
+</script>
+</html>
+

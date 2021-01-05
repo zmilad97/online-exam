@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<title>Online Exam Service | Add Question</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<script type="application/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+<style>
+    body, h1, h5 {
+        font-family: "Raleway", sans-serif
+    }
+
+    body, html {
+        height: 100%
+    }
+
+    body {
+        background-image: url("https://news.uchicago.edu/sites/default/files/styles/full_width/public/images/2018-05/sjyeprhvxi1007820110114.jpg?itok=rWr_JB4t");
+    }
+
+    p {
+        color: #2f3c7e;
+        /*background-color:#2f3c7e ;*/
+    }
+
+    .button {
+        background-color: #2f3c7e;
+        color: #f0a07c;
+        border: none;
+        resize: none;
+        padding: 15px 40px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        transition: 0.7s;
+
+    }
+
+    .button:hover {
+        transition: 0.7s;
+        background-color: #f4af1b;
+        color: #00154f;
+
+    }
+
+
+    .bgimg {
+        background-color: #fbeaeb;
+        background-image: url("http://junaidstutorials.com/wp-content/uploads/2019/02/pexels-photo-983830.jpeg");
+        min-height: 100%;
+        background-position: center;
+        background-size: cover;
+    }
+
+    form {
+        border: 3px solid #f1f1f1;
+        padding: 20px;
+        border: 1px solid black;
+        position: absolute;
+        margin: 0 auto;
+        top: 79%;
+        left: 50%;
+        transform: translate(-50%, -80%);
+        float: left;
+    }
+
+    input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    input[type=number], input[type=text] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    label {
+        color: #2f3c7e;
+    }
+
+    button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+
+
+</style>
+<body onload="loadForm()">
+
+<div class="bgimg w3-display-container w3-text-white">
+    <div class="w3-display-middle w3-jumbo">
+    </div>
+
+    <form>
+        <div class="container">
+
+            <label><b>Please Select Exam</b></label>&nbsp;&nbsp;<select id="myExam" name="myExam">
+        </select>
+            <br>
+            <label><b>Question Description </b></label>
+            <input type="text" placeholder="Question Description" name="qd" id="qd">
+            <br>
+            <label><b>Option 1 </b></label>
+            <input type="radio" name="option" value="1">
+            <input type="text" placeholder="Enter Option 1" id="o1">
+            <br>
+            <label><b>Option 2</b></label>
+            <input type="radio" name="option" value="2">
+            <input type="text" placeholder="Enter Option 2" id="o2">
+            <br>
+            <label><b>Option 3 </b></label>
+            <input type="radio" name="option" value="3">
+            <input type="text" placeholder="Enter Option 3" id="o3">
+            <br>
+            <label><b>Option 4 </b></label>
+            <input type="radio" name="option" value="4">
+            <input type="text" placeholder="Enter Option 4" id="o4">
+
+            <button onclick="add()">Submit</button>
+
+        </div>
+    </form>
+
+
+    <div class="w3-display-topleft w3-container w3-xlarge">
+        <p>
+            <a href="/logout" class="button">LogOut</a>
+        </p>
+
+        <p>
+            <a href="/makeExam.html" class="button">Make Exam</a>
+        </p>
+
+        <p>
+            <a href="/index" class="button">Home</a>
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+<script type="application/javascript">
+
+    function add() {
+        console.log("1");
+        var question = {};
+        console.log("2");
+        let options = new Map();
+        console.log("3");
+        question.description = document.getElementById("qd").value;
+        question.examId = document.getElementById("myExam").value;
+        options["1"] = $( "#o1" ).val();
+        options["2"] = $( "#o2" ).val();
+        options["3"] = $( "#o3" ).val();
+        options["4"] = $( "#o4" ).val();
+        question.options = options;
+        console.log(JSON.stringify(options));
+        console.log(JSON.stringify(question));
+        question.correct = $('input[name="option"]:checked').val();
+
+        if (question.description == null || question.description === "", question.examId == null || question.examId === "") {
+            alert("Please Fill All Required Field");
+            return false;
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/question/takeQuestion",
+                data: JSON.stringify(question),
+                dataType: "json",
+                contentType: "application/json",
+                 statusCode: {200: alert("Question Added")}
+            });
+        }
+    }
+
+    function loadForm() {
+        $.get("/exam/available", function (data) {
+
+            var x = document.getElementById("myExam");
+            var option = document.createElement("option");
+            for (var i = 0; i < data.length; i++) {
+                option.text = data.title;
+                x.options[x.options.length] = new Option(data[i].title, data[i].id);
+            }
+        });
+    }
+</script>
+</html>
+

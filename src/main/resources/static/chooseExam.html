@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<title>Online Exam Service | Choose Exam Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<script type="application/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+<style>
+    body, h1, h5 {
+        font-family: "Raleway", sans-serif
+    }
+
+    body, html {
+        height: 100%
+    }
+
+    body {
+    }
+
+    p {
+        color: #2f3c7e;
+        /*background-color:#2f3c7e ;*/
+    }
+
+    .button {
+        background-color: #2f3c7e;
+        color: #f0a07c;
+        border: none;
+        resize: none;
+        padding: 15px 40px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        transition: 0.7s;
+
+    }
+
+    .button:hover {
+        transition: 0.7s;
+        background-color: #f4af1b;
+        color: #00154f;
+
+    }
+
+
+    .bgimg {
+        background-color: #1efb6e;
+        background-image: url("https://q3p9g6n2.rocketcdn.me/wp-content/ml-loads/2014/06/test-quiz-shutterstock-e1420659305719.jpg");
+        min-height: 100%;
+        background-position: center;
+        background-size: cover;
+        background-repeat: repeat-y;
+    }
+
+    form {
+        background-color: #00154f;
+        border: 1px solid black;
+        padding: 20px;
+        position: fixed;
+        top: 79%;
+        left: 50%;
+        transform: translate(-50%, -200%);
+        float: left;
+    }
+
+    input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    input[type=number], input[type=text] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    label {
+        color: #2f3c7e;
+    }
+
+    button {
+        background-color: #f4af1b;
+        color: black;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+    #middle{
+
+    }
+    #examSelect{
+        background-color: #f4af1b;
+        color: black;
+        padding: 12px 60px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+    }
+    #examLabel {
+        color: #f4af1b;
+    }
+
+</style>
+<body onload="loadForm()">
+
+<div class="bgimg w3-display-container w3-text-white">
+    <div class="w3-display-middle w3-jumbo">
+        <!--        <p>Online Exam Service</p>-->
+    </div>
+
+    <form>
+        <div class="container">
+
+            <div id="middle" style="">
+                <br>
+                <label id="examLabel"><b>Please Select Exam</b></label>&nbsp;&nbsp;<select id="myExam" name="myExam"></select>
+                <br>
+                <br>
+                <br>
+                <a onclick="examSelect()" id="examSelect">Select</a>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="w3-display-topleft w3-container w3-xlarge">
+        <p>
+            <a href="/logout" class="button">LogOut</a>
+        </p>
+
+        <p>
+            <a href="/index" class="button">Home</a>
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+<script type="application/javascript">
+    function examSelect() {
+        var exam = $( "#myExam" ).val();
+        window.location.href = '/takeExam.html?' + exam;
+
+
+    }
+
+    // function add() {
+    //
+    //     var exam = {};
+    //     exam.title = document.getElementById("title").value;
+    //     exam.category = document.getElementById("category").value;
+    //     exam.grade = document.getElementById("grade").value;
+    //     exam.time = document.getElementById("time").value;
+    //     exam.beforeExamMessage = document.getElementById("bem").value;
+    //
+    //     if (exam.title == null || exam.title === "", exam.category == null || exam.category === "", exam.grade == null || exam.grade === ""
+    //         , exam.time == null || exam.time === "") {
+    //         alert("Please Fill All Required Field");
+    //         return false;
+    //     } else {
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "exam/add",
+    //             data: JSON.stringify(exam),
+    //             dataType: "json",
+    //             contentType: "application/json",
+    //
+    //             statusCode: {200: window.location.href = "/question/add"}
+    //         });
+    //     }
+    // }
+
+
+    function loadForm() {
+        $.get("/exam/available", function (data) {
+
+            // console.log(data[0]); // HTML content of the jQuery.ajax page
+            // console.log(data[0].title);
+            var x = document.getElementById("myExam");
+            var option = document.createElement("option");
+            for (var i = 0; i < data.length; i++) {
+                option.text = data.title;
+                x.options[x.options.length] = new Option(data[i].title, data[i].id);
+
+            }
+        });
+
+    }
+
+    //
+</script>
+</html>
+
