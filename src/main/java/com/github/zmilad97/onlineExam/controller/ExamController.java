@@ -10,6 +10,7 @@ import com.github.zmilad97.onlineExam.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,9 +46,11 @@ public class ExamController {
 
     //returns all available exams
     @GetMapping("available")
-    public List<Exam> available() {
-
-        return examService.findByActiveTrue();
+    public List<Exam> availableExams() {
+        List<Exam> exams = new ArrayList<>();
+        List<String> examIds = SecurityUtil.getCurrentUser().getPermissionList();
+        examIds.forEach(id -> exams.add(examService.findByActiveTrueAndId(Long.parseLong(id))));
+        return exams;
     }
 
     @GetMapping("{examId}")
