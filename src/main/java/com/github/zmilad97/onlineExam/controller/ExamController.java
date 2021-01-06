@@ -47,8 +47,8 @@ public class ExamController {
     @GetMapping("available")
     public List<Exam> availableExams() {
         List<Exam> exams = new ArrayList<>();
-        List<String> examIds = SecurityUtil.getCurrentUser().getPermissionList();
-        examIds.forEach(id -> exams.add(examService.findByActiveTrueAndId(Long.parseLong(id))));
+        List<String> userPermissionsExamIds = SecurityUtil.getCurrentUser().getPermissionList();
+        userPermissionsExamIds.forEach(id -> exams.add(examService.findByActiveTrueAndId(Long.parseLong(id))));
         return exams;
     }
 
