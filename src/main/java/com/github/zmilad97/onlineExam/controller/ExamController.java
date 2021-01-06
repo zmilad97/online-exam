@@ -3,10 +3,7 @@ package com.github.zmilad97.onlineExam.controller;
 import com.github.zmilad97.onlineExam.module.Exam;
 import com.github.zmilad97.onlineExam.module.Question;
 import com.github.zmilad97.onlineExam.security.SecurityUtil;
-import com.github.zmilad97.onlineExam.services.CorrectionService;
-import com.github.zmilad97.onlineExam.services.ExamService;
-import com.github.zmilad97.onlineExam.services.QuestionService;
-import com.github.zmilad97.onlineExam.services.UserService;
+import com.github.zmilad97.onlineExam.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,13 +18,15 @@ public class ExamController {
     private final CorrectionService correctionService;
     private final QuestionService questionService;
     private final UserService userService;
+    private final ScoreService scoreService;
 
     @Autowired
-    public ExamController(ExamService examService, CorrectionService correctionService, QuestionService questionService, UserService userService) {
+    public ExamController(ExamService examService, CorrectionService correctionService, QuestionService questionService, UserService userService, ScoreService scoreService) {
         this.examService = examService;
         this.correctionService = correctionService;
         this.questionService = questionService;
         this.userService = userService;
+        this.scoreService = scoreService;
     }
 
     //adding a exam
@@ -61,7 +60,10 @@ public class ExamController {
     @GetMapping("/{examId}/questions")
     public List<Question> getQuestionsByExamId(@PathVariable String examId) {
         //TODO : need to check if student participate or not
-        return questionService.findByExamId(examId);
+        if(scoreService.findByUserIdAndExamId(SecurityUtil.getCurrentUser().getId(),Long.parseLong(examId)) == null)
+            return questionService.findByExamId(examId);
+        else
+            return null;
     }
 
 
@@ -71,9 +73,10 @@ public class ExamController {
 
         if (examService.findById(Long.parseLong(examId)).getMakerId() == SecurityUtil.getCurrentUser().getId())
             studentsId.forEach(id -> userService.findUserById(id).addPermission(examId));
+
     }
 
-
+    //TODO : this method seems not right
     //this method gets the User's answers of a exam in a map structure that has a userId and a examId Key and value
     @PostMapping("answer")
     public void takeAnswers(@RequestBody Map<String, String> answer) {
