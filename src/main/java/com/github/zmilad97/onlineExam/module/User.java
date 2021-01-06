@@ -121,7 +121,9 @@ public class User {
         }
         return new ArrayList<>();
     }
-
+    public void addPermission(String permission){
+       this.permissions += "," + permission;
+    }
     public List<String> getPermissionList() {
         if (this.permissions.length() > 0) {
             return Arrays.asList(this.permissions.split(","));

@@ -68,6 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/question/add").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/exam/add").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/addQuestion.html").hasAnyRole("ADMIN","MASTER")
+                .antMatchers("/exam/{examId}/add2exam").hasAnyRole("ADMIN","MASTER")      //TODO :Check Here {examId}
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/index")
