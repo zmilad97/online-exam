@@ -64,14 +64,6 @@ public class ExamController {
     public void takeAnswers(@RequestBody Map<String, String> answer) {
         correctionService.correction(answer);
     }
-//
-//    @GetMapping("{examId}")
-//    public Exam getExamById(@PathVariable String examId){
-//        return examService.findByActiveTrueAndId(Long.parseLong(examId));
-//    }
-
-
-    //this method return exam by id
 
 
     //this method return list of exam that in same category
@@ -92,13 +84,6 @@ public class ExamController {
         return examService.findAllByTitleContains(title);
     }
 
-    //init for test
-//    @GetMapping("init")
-//    public String init() {
-//        DbInit dbInit = new DbInit();
-//        Exam exam = dbInit.initExam();
-//        examService.save(exam);
-//        return "init Exam Done";
-//    }
+
 
 }

@@ -24,10 +24,6 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
     }
-    @GetMapping("test")
-    public String test(){
-        return "success";
-    }
 
 
     @DeleteMapping("remove/{id}")
@@ -44,8 +40,4 @@ public class UserController {
         return "init User Done";
     }
 
-    @GetMapping("admin")
-    public String adminTest() {
-        return "admin test done";
-    }
 }

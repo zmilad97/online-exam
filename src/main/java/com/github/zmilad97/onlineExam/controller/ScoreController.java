@@ -29,6 +29,7 @@ public class ScoreController {
         readWriteLock = new ReentrantReadWriteLock();
     }
 
+    //client post their answers to this method
     @PostMapping("take")
     public void takeAnswers(@RequestBody List<String> answers) {
         for (int i = 1; i < answers.size(); i++) {
@@ -47,7 +48,7 @@ public class ScoreController {
 
     @GetMapping("result")
     public double result(@RequestBody long examId) {
-    return scoreServiceClass.result(SecurityUtil.getCurrentUser().getId(),examId);
+        return scoreServiceClass.result(SecurityUtil.getCurrentUser().getId(), examId);
     }
 
 }
