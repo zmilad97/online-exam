@@ -1,7 +1,5 @@
 package com.github.zmilad97.onlineExam.module;
 
-import net.bytebuddy.implementation.bind.annotation.Default;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +14,7 @@ public class User {
 
     @Id
     @GeneratedValue
-    private long Id;
+    private long id;
     @Column(nullable = false,unique = true)
     private String username;
     @Column(nullable = false)
@@ -36,11 +34,11 @@ public class User {
     }
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getUsername() {

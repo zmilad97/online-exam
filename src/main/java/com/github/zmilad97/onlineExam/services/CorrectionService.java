@@ -36,7 +36,7 @@ public class CorrectionService {
             scores.setUserId(user.getId());
             scores.setExamId(exam.getId());
             scores.setQuestionId(Long.parseLong(String.valueOf(questions.get(i).getId())));
-            scores.setAnswer(answersMap.get(questions.get(i).getId()));
+            scores.setAnswer(Integer.parseInt(answersMap.get(questions.get(i).getId())));
             scoreService.save(scores);
         }
 

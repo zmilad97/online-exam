@@ -19,6 +19,7 @@ public class AdminController {
 
     @PostMapping("giverole/{userId}")
     public void giveRole(@PathVariable long userId, @RequestBody String role) {
+
         userService.findUserById(userId).setRoles(role);
     }
 
@@ -29,6 +30,12 @@ public class AdminController {
         permissionList.remove(permission);
         userService.findUserById(userId).setPermissions(permissionList);
     }
+
+    @GetMapping("allusers")
+    public List<User> getAllUsers(){
+       return userService.findAll();
+    }
+
 
 
 }

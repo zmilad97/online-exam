@@ -8,7 +8,7 @@ import java.util.Map;
 public class Question {
     @Id
     @GeneratedValue
-    private long Id;
+    private long id;
     private String description;
     private String examId;
     @ElementCollection
@@ -17,11 +17,11 @@ public class Question {
 
 
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getDescription() {
