@@ -20,7 +20,7 @@ public class DbInit {
         user.setBirthDate("1997");
         user.setEmail("zmilad97@gmail.com");
         user.setGender(User.Gender.MALE);
-        user.setPermissions("admin");
+        user.addPermission("admin");
         user.setRoles("ADMIN");
         user.setActive(true);
         return user;

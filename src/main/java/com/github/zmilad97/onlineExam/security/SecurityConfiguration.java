@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth)  {
         auth.authenticationProvider(authenticationProvider());
     }
 
@@ -65,10 +65,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/index").authenticated()
                 .antMatchers("/user/init").permitAll()
                 .antMatchers("/user/add").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/remove/**").hasRole("ADMIN")
                 .antMatchers("/question/add").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/exam/add").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/addQuestion.html").hasAnyRole("ADMIN","MASTER")
-                .antMatchers("/exam/{examId}/add2exam").hasAnyRole("ADMIN","MASTER")      //TODO :Check Here {examId}
+                .antMatchers("/exam/**/add2exam").hasAnyRole("ADMIN","MASTER")      //TODO :Check Here **
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/index")

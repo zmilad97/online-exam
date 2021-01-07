@@ -60,7 +60,7 @@ public class ExamController {
     @GetMapping("/{examId}/questions")
     public List<Question> getQuestionsByExamId(@PathVariable String examId) {
         //TODO : need to check if student participate or not
-        if(scoreService.findByUserIdAndExamId(SecurityUtil.getCurrentUser().getId(),Long.parseLong(examId)) == null)
+        if (scoreService.findByUserIdAndExamId(SecurityUtil.getCurrentUser().getId(), Long.parseLong(examId)) == null)
             return questionService.findByExamId(examId);
         else
             return null;
@@ -71,10 +71,26 @@ public class ExamController {
     @PostMapping("{examId}/add2exam")
     public void givePermissionToStudent(@RequestBody List<Long> studentsId, @PathVariable String examId) {
 
-        if (examService.findById(Long.parseLong(examId)).getMakerId() == SecurityUtil.getCurrentUser().getId())
+        if (examService.findById(Long.parseLong(examId)).getMakerId() == SecurityUtil.getCurrentUser().getId()
+                || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
             studentsId.forEach(id -> userService.findUserById(id).addPermission(examId));
 
     }
+
+    //this method allows MASTER or ADMIN to remove a student from exam
+    @PostMapping("{examId}/removefromexam")
+    public void takePermission(@RequestBody Long studentId, @PathVariable String examId) {
+
+        if (examService.findById(Long.parseLong(examId)).getMakerId() == SecurityUtil.getCurrentUser().getId()
+                || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN")) {
+
+            List<String> permissionList = userService.findUserById(studentId).getPermissionList();
+            permissionList.remove(examId);
+            userService.findUserById(studentId).setPermissions(permissionList);
+        }
+
+    }
+
 
     //TODO : this method seems not right
     //this method gets the User's answers of a exam in a map structure that has a userId and a examId Key and value

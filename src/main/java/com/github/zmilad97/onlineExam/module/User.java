@@ -103,8 +103,8 @@ public class User {
         return permissions;
     }
 
-    public void setPermissions(String permissions) {
-        this.permissions = permissions;
+    public void setPermissions(List<String> permissions) {
+        permissions.forEach( p -> this.permissions += p);
     }
 
     public boolean isActive() {

@@ -23,6 +23,7 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //TODO : probably should not allow users to choose their role : user.setRole("USER")
     @PostMapping("add")
     public void addUser(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
