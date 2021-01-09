@@ -22,11 +22,12 @@ public class CorrectionService {
         this.scoreService = scoreService;
     }
 
+    //TODO : fix here
     public void correction(Map<String, String> answersMap) {
         Scores scores  ;
         Exam exam = examService.findById(Long.parseLong(answersMap.get("id")));
         User user = userService.findByUsername(answersMap.get("username"));
-        List<Question> questions = questionService.findByExamId(String.valueOf(exam.getId()));
+        List<Question> questions = questionService.findByExamId(exam.getId());
 
 //        answersMap.remove("id");
 //        answersMap.remove("username");

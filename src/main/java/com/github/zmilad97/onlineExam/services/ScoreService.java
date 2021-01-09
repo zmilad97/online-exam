@@ -12,5 +12,6 @@ public interface ScoreService extends JpaRepository<Scores,List<Long>> {
     boolean existsByUserIdAndExamIdAndQuestionId(Long userId,Long examId,Long questionId);
     Scores findByUserIdAndExamIdAndQuestionId(Long userId,Long examId,Long questionId);
     Scores findByUserIdAndExamId(Long userId,Long examId);
+    List<Scores> findByExamId(long examId);
 }
 

@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface QuestionService extends JpaRepository<Question,Long> {
 
-    List<Question> findByExamId(String examId);
+    List<Question> findByExamId(long examId);
     Question findQuestionById(Long Id);
 }

@@ -58,9 +58,9 @@ public class ExamController {
     }
 
     @GetMapping("/{examId}/questions")
-    public List<Question> getQuestionsByExamId(@PathVariable String examId) {
+    public List<Question> getQuestionsByExamId(@PathVariable long examId) {
         //TODO : need to check if student participate or not
-        if (scoreService.findByUserIdAndExamId(SecurityUtil.getCurrentUser().getId(), Long.parseLong(examId)) == null)
+        if (scoreService.findByUserIdAndExamId(SecurityUtil.getCurrentUser().getId(), examId) == null)
             return questionService.findByExamId(examId);
         else
             return null;
@@ -90,6 +90,10 @@ public class ExamController {
         }
 
     }
+
+
+
+    //TODO : add a method to get exam and answer
 
 
     //TODO : this method seems not right

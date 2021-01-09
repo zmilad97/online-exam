@@ -36,7 +36,7 @@ public class ScoreController {
             readWriteLock.readLock().lock();
             Scores scores = new Scores();
             scores.setExamId(Long.parseLong(answers.get(0)));
-            scores.setQuestionId(questionService.findByExamId(answers.get(0)).get(i - 1).getId());
+            scores.setQuestionId(questionService.findByExamId(Long.parseLong(answers.get(0))).get(i - 1).getId());
             scores.setAnswer(Integer.parseInt(answers.get(i)));
             scores.setUserId(SecurityUtil.getCurrentUser().getId());
 

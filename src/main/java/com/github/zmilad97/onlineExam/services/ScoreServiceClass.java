@@ -20,7 +20,7 @@ public class ScoreServiceClass {
     }
 
     public double result(long userId, long examId) {
-        List<Question> questions = questionService.findByExamId(String.valueOf(examId));
+        List<Question> questions = questionService.findByExamId(examId);
         double score = 0;
         for (Question question : questions) {if (
             scoreService.findByUserIdAndExamIdAndQuestionId(userId, examId, question.getId()).getAnswer()
@@ -29,6 +29,4 @@ public class ScoreServiceClass {
         }
         return score;
     }
-
-
 }

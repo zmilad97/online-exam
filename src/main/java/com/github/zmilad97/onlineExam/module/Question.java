@@ -10,7 +10,7 @@ public class Question {
     @GeneratedValue
     private long id;
     private String description;
-    private String examId;
+    private long examId;
     @ElementCollection
     private Map<String, String> options = new LinkedHashMap<>();
     private int correct;
@@ -32,11 +32,11 @@ public class Question {
         this.description = description;
     }
 
-    public String getExamId() {
+    public long getExamId() {
         return examId;
     }
 
-    public void setExamId(String examId) {
+    public void setExamId(long examId) {
         this.examId = examId;
     }
 
