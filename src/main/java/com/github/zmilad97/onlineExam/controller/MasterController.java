@@ -2,6 +2,7 @@ package com.github.zmilad97.onlineExam.controller;
 
 import com.github.zmilad97.onlineExam.module.Question;
 import com.github.zmilad97.onlineExam.module.Scores;
+import com.github.zmilad97.onlineExam.module.User;
 import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import com.github.zmilad97.onlineExam.services.ExamService;
 import com.github.zmilad97.onlineExam.services.QuestionService;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/master/")
@@ -32,7 +35,7 @@ public class MasterController {
     }
 
     @GetMapping("result/{examId}")
-    private List<Scores> examResult(@PathVariable long examId) {
+    public List<Scores> examResult(@PathVariable long examId) {
         if (examService.findById(examId).getMakerId() == (SecurityUtil.getCurrentUser().getId())
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
             return scoreService.findByExamId(examId);
@@ -40,11 +43,19 @@ public class MasterController {
     }
 
     @GetMapping("question/{examId}")
-    private List<Question> getQuestion(@PathVariable long examId) {
+    public List<Question> getQuestion(@PathVariable long examId) {
         if (examService.findById(examId).getMakerId() == (SecurityUtil.getCurrentUser().getId())
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
             return questionService.findByExamId(examId);
         return null;
+    }
+
+    @GetMapping("get-user")
+    public Map<Long,String> getUsers(){
+        Map<Long,String> usersMap = new HashMap<>();
+        List<User> users = userService.findAll();
+        users.forEach(user -> usersMap.put(user.getId(), user.getName()));
+        return usersMap;
     }
 
 
