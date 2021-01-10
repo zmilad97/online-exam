@@ -17,25 +17,33 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @PostMapping("giverole/{userId}")
+    @PostMapping("give-role/{userId}")
     public void giveRole(@PathVariable long userId, @RequestBody String role) {
-
+//        User user = userService.findUserById(userId);
+//        user.setRoles(role);
+//        userService.save(user);
         userService.findUserById(userId).setRoles(role);
+        userService.save(userService.findUserById(userId));
     }
 
     //this method removes a permission from user
-    @PostMapping("takepermission/{userId}")
+    @PostMapping("take-permission/{userId}")
     public void takePermission(@PathVariable long userId, @RequestBody String permission) {
         List<String> permissionList = userService.findUserById(userId).getPermissionList();
         permissionList.remove(permission);
         userService.findUserById(userId).setPermissions(permissionList);
+        userService.save(userService.findUserById(userId));
     }
 
-    @GetMapping("allusers")
+    @GetMapping("all-users")
     public List<User> getAllUsers(){
-       return userService.findAll();
+        return userService.findAll();
     }
 
 
+    @GetMapping("find-user/{id}")
+    public User findUserById(@PathVariable long id){
+       return userService.findUserById(id);
+    }
 
 }

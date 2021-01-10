@@ -2,11 +2,13 @@ package com.github.zmilad97.onlineExam.controller;
 
 import com.github.zmilad97.onlineExam.dbinit.DbInit;
 import com.github.zmilad97.onlineExam.module.User;
+import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import com.github.zmilad97.onlineExam.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +30,9 @@ public class UserController {
     public void addUser(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(true);
+        user.setPermissions(new ArrayList<>());
+        user.addPermission("user");
+        user.setRoles("USER");
         userService.save(user);
     }
 
@@ -44,6 +49,10 @@ public class UserController {
         userService.deleteById(id);
     }
 
+    @GetMapping("status")
+    public User myStatus(){
+        return SecurityUtil.getCurrentUser();
+    }
 
     @GetMapping("init")
     public String init() {

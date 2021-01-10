@@ -43,7 +43,7 @@ public class ExamController {
         return examService.findByMakerId(SecurityUtil.getCurrentUser().getId());
     }
 
-    //returns all available exams
+    //returns all available exams to the student
     @GetMapping("available")
     public List<Exam> availableExams() {
         List<Exam> exams = new ArrayList<>();
@@ -68,17 +68,18 @@ public class ExamController {
 
 
     //this method allows Master or Admin to choose students for taking exam
-    @PostMapping("{examId}/add2exam")
+    @PostMapping("{examId}/add-to-exam")
     public void givePermissionToStudent(@RequestBody List<Long> studentsId, @PathVariable String examId) {
 
         if (examService.findById(Long.parseLong(examId)).getMakerId() == SecurityUtil.getCurrentUser().getId()
-                || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
+                || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN")) {
             studentsId.forEach(id -> userService.findUserById(id).addPermission(examId));
-
+            studentsId.forEach(id -> userService.save(userService.findUserById(id)));
+        }
     }
 
     //this method allows MASTER or ADMIN to remove a student from exam
-    @PostMapping("{examId}/removefromexam")
+    @PostMapping("{examId}/remove-from-exam")
     public void takePermission(@RequestBody Long studentId, @PathVariable String examId) {
 
         if (examService.findById(Long.parseLong(examId)).getMakerId() == SecurityUtil.getCurrentUser().getId()
@@ -87,10 +88,10 @@ public class ExamController {
             List<String> permissionList = userService.findUserById(studentId).getPermissionList();
             permissionList.remove(examId);
             userService.findUserById(studentId).setPermissions(permissionList);
+            userService.save(userService.findUserById(studentId));
         }
 
     }
-
 
 
     //TODO : add a method to get exam and answer
