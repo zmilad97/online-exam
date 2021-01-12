@@ -10,7 +10,7 @@ public class Question {
     @GeneratedValue
     private long id;
     private String description;
-    private long examId;
+    private long examId;//it is a foreign key, so define it by the @OneToMany annotation
     @ElementCollection
     private Map<String, String> options = new LinkedHashMap<>();
     private int correct;

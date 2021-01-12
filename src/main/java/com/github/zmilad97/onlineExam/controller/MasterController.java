@@ -36,10 +36,11 @@ public class MasterController {
 
     @GetMapping("result/{examId}")
     public List<Scores> examResult(@PathVariable long examId) {
+      //As this part of the code is used several times, it would be better to encapsulate it into another method in SecurityUtil
         if (examService.findById(examId).getMakerId() == (SecurityUtil.getCurrentUser().getId())
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
             return scoreService.findByExamId(examId);
-        return null;
+        return null; //isn't it better to return some other status code instead null? for example 403, by the help of ResponseEntity
     }
 
     @GetMapping("question/{examId}")

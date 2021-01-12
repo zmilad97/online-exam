@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/exam/")
@@ -29,7 +30,11 @@ public class ExamController {
         this.scoreService = scoreService;
     }
 
-    //adding a exam
+  /**
+   * It's better to write documentation for you class or methods like this, standard javadoc :)
+   * @param exam
+   */
+  //adding a exam
     @PostMapping("add")
     public void addExam(@RequestBody Exam exam) {
         exam.setMakerId(SecurityUtil.getCurrentUser().getId());
@@ -46,10 +51,9 @@ public class ExamController {
     //returns all available exams to the student
     @GetMapping("available")
     public List<Exam> availableExams() {
-        List<Exam> exams = new ArrayList<>();
-        List<String> userPermissionsExamIds = SecurityUtil.getCurrentUser().getPermissionList();
-        userPermissionsExamIds.forEach(id -> exams.add(examService.findByActiveTrueAndId(Long.parseLong(id))));
-        return exams;
+     return examService.findByActiveTrueAndIdIn(
+         SecurityUtil.getCurrentUser().getPermissionList()
+             .stream().map(Long::parseLong).collect(Collectors.toList()));
     }
 
     @GetMapping("{examId}")
@@ -81,7 +85,7 @@ public class ExamController {
     //this method allows MASTER or ADMIN to remove a student from exam
     @PostMapping("{examId}/remove-from-exam")
     public void takePermission(@RequestBody Long studentId, @PathVariable String examId) {
-
+        //You get runtimeException if the ExamId is not number or it's corresponding exam entity is not found
         if (examService.findById(Long.parseLong(examId)).getMakerId() == SecurityUtil.getCurrentUser().getId()
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN")) {
 

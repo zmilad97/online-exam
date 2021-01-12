@@ -4,18 +4,18 @@ package com.github.zmilad97.onlineExam.module;
 import javax.persistence.*;
 
 @Entity
-@IdClass(ScoresIdClass.class)
+@IdClass(ScoresIdClass.class) //you can define a normal scoreId and just index the userId and questionId foreign keys to get rid of ScoresIdClass
 public class Scores {
 
     @Id
     private long userId;
     @Id
-    private long examId;
+    private long examId; //I think this relation here is redundant, as you have the QuestionId and the Question entity is related to the exam itself
     @Id
     private long questionId;
 
     private int answer;
-
+  //it's useless to define empty default constructor when you don't have other constructors
     public Scores() {
 
     }

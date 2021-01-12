@@ -26,12 +26,12 @@ public class ScoreController {
         this.scoreService = scoreService;
         this.questionService = questionService;
         this.scoreServiceClass = scoreServiceClass;
-        readWriteLock = new ReentrantReadWriteLock();
+        readWriteLock = new ReentrantReadWriteLock(); //I see that you just use a ReadLock of this ReadWrite lock, so in all of the conditions, it does not prevent any thread!
     }
 
     //client post their answers to this method
     @PostMapping("take")
-    public void takeAnswers(@RequestBody List<String> answers) {
+    public void takeAnswers(@RequestBody List<String> answers) { //isn't it better to accept a List of Long?
         for (int i = 1; i < answers.size(); i++) {
             readWriteLock.readLock().lock();
             Scores scores = new Scores();
@@ -42,7 +42,7 @@ public class ScoreController {
 
             if (!(scoreService.existsByUserIdAndExamIdAndQuestionId(scores.getUserId(), scores.getExamId(), scores.getQuestionId())))
                 scoreService.save(scores);
-            readWriteLock.readLock().unlock();
+            readWriteLock.readLock().unlock(); //usually it's better to have this unlock in a finally block to make sure that it will be executed if any exception happened in the meantime
         }
     }
 

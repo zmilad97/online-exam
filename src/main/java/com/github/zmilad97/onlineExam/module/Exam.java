@@ -19,7 +19,7 @@ public class Exam {
     private boolean showAnswer;
     private boolean showScore;
     private String beforeExamMessage;
-    private long makerId;
+    private long makerId; //it is a foreign key, so define it by the @OneToMany annotation
     private boolean active;
 
     public Exam(){

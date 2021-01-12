@@ -22,13 +22,14 @@ public class AdminController {
 //        User user = userService.findUserById(userId);
 //        user.setRoles(role);
 //        userService.save(user);
-        userService.findUserById(userId).setRoles(role);
+        userService.findUserById(userId).setRoles(role); //it could be better to do it internally by userService
         userService.save(userService.findUserById(userId));
     }
 
     //this method removes a permission from user
     @PostMapping("take-permission/{userId}")
     public void takePermission(@PathVariable long userId, @RequestBody String permission) {
+      //it could be better to do it internally in userService
         List<String> permissionList = userService.findUserById(userId).getPermissionList();
         permissionList.remove(permission);
         userService.findUserById(userId).setPermissions(permissionList);
@@ -37,6 +38,7 @@ public class AdminController {
 
     @GetMapping("all-users")
     public List<User> getAllUsers(){
+      //Do you need pagination here?
         return userService.findAll();
     }
 

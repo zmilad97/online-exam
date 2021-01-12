@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @GetMapping("init")
-    public String init() {
+    public String init() { //Spring-boot has a capability to initialize your database in the first run by just providing the proper sql file
         DbInit dbInit = new DbInit(passwordEncoder);
         User user = dbInit.initUser();
         userService.save(user);
