@@ -18,7 +18,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class ScoreController {
     private final ScoreService scoreService;
     private final QuestionService questionService;
-    private final ReadWriteLock readWriteLock;
     private final ScoreServiceClass scoreServiceClass;
 
     @Autowired
@@ -26,24 +25,17 @@ public class ScoreController {
         this.scoreService = scoreService;
         this.questionService = questionService;
         this.scoreServiceClass = scoreServiceClass;
-        readWriteLock = new ReentrantReadWriteLock();
     }
 
-    //client post their answers to this method
+    /**
+     * client post their answers to this method
+     *
+     * @param answers send by user
+     *
+     */
     @PostMapping("take")
-    public void takeAnswers(@RequestBody List<String> answers) {
-        for (int i = 1; i < answers.size(); i++) {
-            readWriteLock.readLock().lock();
-            Scores scores = new Scores();
-            scores.setExamId(Long.parseLong(answers.get(0)));
-            scores.setQuestionId(questionService.findByExamId(Long.parseLong(answers.get(0))).get(i - 1).getId());
-            scores.setAnswer(Integer.parseInt(answers.get(i)));
-            scores.setUserId(SecurityUtil.getCurrentUser().getId());
-
-            if (!(scoreService.existsByUserIdAndExamIdAndQuestionId(scores.getUserId(), scores.getExamId(), scores.getQuestionId())))
-                scoreService.save(scores);
-            readWriteLock.readLock().unlock();
-        }
+    public void takeAnswers(@RequestBody List<Long> answers) {
+      scoreServiceClass.takeAnswers(answers);
     }
 
     @GetMapping("result")

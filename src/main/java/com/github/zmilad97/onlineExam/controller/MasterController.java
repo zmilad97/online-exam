@@ -9,6 +9,8 @@ import com.github.zmilad97.onlineExam.services.QuestionService;
 import com.github.zmilad97.onlineExam.services.ScoreService;
 import com.github.zmilad97.onlineExam.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,11 +37,11 @@ public class MasterController {
     }
 
     @GetMapping("result/{examId}")
-    public List<Scores> examResult(@PathVariable long examId) {
+    public ResponseEntity<List<Scores>> examResult(@PathVariable long examId) {
         if (examService.findById(examId).getMakerId() == (SecurityUtil.getCurrentUser().getId())
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
-            return scoreService.findByExamId(examId);
-        return null;
+            return ResponseEntity.ok(scoreService.findByExamId(examId));
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("question/{examId}")

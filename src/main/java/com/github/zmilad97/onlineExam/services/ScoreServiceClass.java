@@ -1,6 +1,8 @@
 package com.github.zmilad97.onlineExam.services;
 
 import com.github.zmilad97.onlineExam.module.Question;
+import com.github.zmilad97.onlineExam.module.Scores;
+import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +30,18 @@ public class ScoreServiceClass {
            score++;
         }
         return score;
+    }
+
+    public void takeAnswers(List<Long> answers){
+        for (int i = 1; i < answers.size(); i++) {
+            Scores scores = new Scores();
+            scores.setExamId(answers.get(0));
+            scores.setQuestionId(questionService.findByExamId(answers.get(0)).get(i - 1).getId());
+            scores.setAnswer(answers.get(i));
+            scores.setUserId(SecurityUtil.getCurrentUser().getId());
+
+            if (!(scoreService.existsByUserIdAndExamIdAndQuestionId(scores.getUserId(), scores.getExamId(), scores.getQuestionId())))
+                scoreService.save(scores);
+        }
     }
 }

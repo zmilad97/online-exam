@@ -14,12 +14,7 @@ public class Scores {
     @Id
     private long questionId;
 
-    private int answer;
-
-    public Scores() {
-
-    }
-
+    private long answer;
 
     public long getUserId() {
         return userId;
@@ -45,11 +40,11 @@ public class Scores {
         this.questionId = questionId;
     }
 
-    public int getAnswer() {
+    public long getAnswer() {
         return answer;
     }
 
-    public void setAnswer(int answerId) {
+    public void setAnswer(Long answerId) {
         this.answer = answerId;
     }
 
