@@ -25,18 +25,18 @@ public class CorrectionService {
     //TODO : fix here
     public void correction(Map<String, String> answersMap) {
         Scores scores  ;
-        Exam exam = examService.findById(Long.parseLong(answersMap.get("id")));
+        Exam exam = examService.findExamById(Long.parseLong(answersMap.get("id")));
         User user = userService.findByUsername(answersMap.get("username"));
-        List<Question> questions = questionService.findByExamId(exam.getId());
+        List<Question> questions = questionService.findByExam(exam);
 
 //        answersMap.remove("id");
 //        answersMap.remove("username");
 //
         for(int i = 0 ; i<=answersMap.size() ; i++){
             scores = new Scores();
-            scores.setUserId(user.getId());
-            scores.setExamId(exam.getId());
-            scores.setQuestionId(Long.parseLong(String.valueOf(questions.get(i).getId())));
+            scores.setUser(user);
+            scores.setExam(exam);
+            scores.setQuestion(questions.get(i));
             scores.setAnswer(Long.parseLong(answersMap.get(questions.get(i).getId())));
             scoreService.save(scores);
         }

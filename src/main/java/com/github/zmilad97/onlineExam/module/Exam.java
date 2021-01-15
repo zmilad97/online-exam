@@ -19,7 +19,8 @@ public class Exam {
     private boolean showAnswer;
     private boolean showScore;
     private String beforeExamMessage;
-    private long makerId;
+    @ManyToOne
+    private User maker;
     private boolean active;
 
     public Exam(){
@@ -100,14 +101,13 @@ public class Exam {
         this.category = category;
     }
 
-    public long getMakerId() {
-        return makerId;
+    public User getMaker() {
+        return maker;
     }
 
-    public void setMakerId(long makerId) {
-        this.makerId = makerId;
+    public void setMaker(User maker) {
+        this.maker = maker;
     }
-
 
     public boolean isActive() {
         return active;

@@ -1,6 +1,7 @@
 package com.github.zmilad97.onlineExam.services;
 
 import com.github.zmilad97.onlineExam.module.Exam;
+import com.github.zmilad97.onlineExam.module.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,9 +16,9 @@ public interface ExamService extends JpaRepository<Exam, Long> {
 
     List<Exam> findAllByTitleContains(String title);
 
-    List<Exam> findByMakerId(long id);
+    List<Exam> findByMaker(User maker);
 
-    Exam findById(long id);
+    Exam findExamById(long id);
 
     List<Exam> findByActiveTrueAndIdIn(List<Long> collect);
 }

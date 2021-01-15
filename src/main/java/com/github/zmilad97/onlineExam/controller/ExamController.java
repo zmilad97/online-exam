@@ -38,7 +38,7 @@ public class ExamController {
      */
     @PostMapping("add")
     public void addExam(@RequestBody Exam exam) {
-        exam.setMakerId(SecurityUtil.getCurrentUser().getId());
+        exam.setMaker(SecurityUtil.getCurrentUser());
         exam.setActive(true);
         examService.save(exam);
     }
@@ -50,7 +50,7 @@ public class ExamController {
      */
     @GetMapping("myExam")
     public List<Exam> myExam() {
-        return examService.findByMakerId(SecurityUtil.getCurrentUser().getId());
+        return examService.findByMaker(SecurityUtil.getCurrentUser());
     }
 
     /**
@@ -66,14 +66,14 @@ public class ExamController {
 
     @GetMapping("{examId}")
     public String getExamTitleById(@PathVariable long examId) {
-        return examService.findById(examId).getTitle();
+        return examService.findExamById(examId).getTitle();
     }
 
     @GetMapping("/{examId}/questions")
     public List<Question> getQuestionsByExamId(@PathVariable long examId) {
         //TODO : need to check if student participate or not
-        if (scoreService.findByUserIdAndExamId(SecurityUtil.getCurrentUser().getId(), examId) == null)
-            return questionService.findByExamId(examId);
+        if (scoreService.findByUserAndExam(SecurityUtil.getCurrentUser(), examService.findExamById(examId)) == null)
+            return questionService.findByExam(examService.findExamById(examId));
         else
             return null;
     }
@@ -88,7 +88,7 @@ public class ExamController {
     @PostMapping("{examId}/add-to-exam")
     public void givePermissionToStudent(@RequestBody List<Long> studentsId, @PathVariable long examId) {
 
-        if (examService.findById(examId).getMakerId() == SecurityUtil.getCurrentUser().getId()
+        if (examService.findExamById(examId).getMaker() == SecurityUtil.getCurrentUser()
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
             userServiceClass.givePermission(studentsId, String.valueOf(examId));
     }
@@ -102,7 +102,7 @@ public class ExamController {
     @PostMapping("{examId}/remove-from-exam")
     public void takePermission(@RequestBody Long studentId, @PathVariable long examId) {
 
-        if (examService.findById(examId).getMakerId() == SecurityUtil.getCurrentUser().getId()
+        if (examService.findExamById(examId).getMaker() == SecurityUtil.getCurrentUser()
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
 
             userServiceClass.takePermission(studentId, String.valueOf(examId));
@@ -151,5 +151,9 @@ public class ExamController {
         return examService.findAllByTitleContains(title);
     }
 
+    @GetMapping("all")
+    public List<Exam> allExam(){
+        return examService.findAll();
+    }
 
 }

@@ -38,17 +38,17 @@ public class MasterController {
 
     @GetMapping("result/{examId}")
     public ResponseEntity<List<Scores>> examResult(@PathVariable long examId) {
-        if (examService.findById(examId).getMakerId() == (SecurityUtil.getCurrentUser().getId())
+        if (examService.findExamById(examId).getMaker() == (SecurityUtil.getCurrentUser())
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
-            return ResponseEntity.ok(scoreService.findByExamId(examId));
+            return ResponseEntity.ok(scoreService.findByExam(examService.findExamById(examId)));
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("question/{examId}")
     public List<Question> getQuestion(@PathVariable long examId) {
-        if (examService.findById(examId).getMakerId() == (SecurityUtil.getCurrentUser().getId())
+        if (examService.findExamById(examId).getMaker() == (SecurityUtil.getCurrentUser())
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
-            return questionService.findByExamId(examId);
+            return questionService.findByExam(examService.findExamById(examId));
         return null;
     }
 
@@ -59,6 +59,7 @@ public class MasterController {
         users.forEach(user -> usersMap.put(user.getId(), user.getName()));
         return usersMap;
     }
+
 
 
 }

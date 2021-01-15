@@ -4,40 +4,57 @@ package com.github.zmilad97.onlineExam.module;
 import javax.persistence.*;
 
 @Entity
-@IdClass(ScoresIdClass.class)
+//@IdClass(ScoresIdClass.class)
 public class Scores {
 
     @Id
-    private long userId;
-    @Id
-    private long examId;
-    @Id
-    private long questionId;
+    private long Id;
+
+    @OneToOne
+    private User user;
+
+    @OneToOne
+    private Exam exam;
+
+    @OneToOne
+    private Question question;
 
     private long answer;
 
-    public long getUserId() {
-        return userId;
+    public long getId() {
+        return Id;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setId(long id) {
+        Id = id;
     }
 
-    public long getExamId() {
-        return examId;
+    public User getUser() {
+        return user;
     }
 
-    public void setExamId(long examId) {
-        this.examId = examId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public long getQuestionId() {
-        return questionId;
+    public Exam getExam() {
+        return exam;
     }
 
-    public void setQuestionId(long questionId) {
-        this.questionId = questionId;
+    public void setExam(Exam exam) {
+        this.exam = exam;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public void setAnswer(long answer) {
+        this.answer = answer;
     }
 
     public long getAnswer() {

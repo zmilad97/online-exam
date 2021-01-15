@@ -1,7 +1,9 @@
 package com.github.zmilad97.onlineExam.services;
 
+import com.github.zmilad97.onlineExam.module.Exam;
 import com.github.zmilad97.onlineExam.module.Question;
 import com.github.zmilad97.onlineExam.module.Scores;
+import com.github.zmilad97.onlineExam.module.User;
 import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,11 @@ public class ScoreServiceClass {
         this.questionService = questionService;
     }
 
-    public double result(long userId, long examId) {
-        List<Question> questions = questionService.findByExamId(examId);
+    public double result(User user, Exam exam) {
+        List<Question> questions = questionService.findByExam(exam);
         double score = 0;
         for (Question question : questions) {if (
-            scoreService.findByUserIdAndExamIdAndQuestionId(userId, examId, question.getId()).getAnswer()
+            scoreService.findByUserAndExamAndQuestion(user, exam, question).getAnswer()
                ==   questionService.findQuestionById(question.getId()).getCorrect())
            score++;
         }
@@ -35,12 +37,12 @@ public class ScoreServiceClass {
     public void takeAnswers(List<Long> answers){
         for (int i = 1; i < answers.size(); i++) {
             Scores scores = new Scores();
-            scores.setExamId(answers.get(0));
-            scores.setQuestionId(questionService.findByExamId(answers.get(0)).get(i - 1).getId());
+            scores.setExam(examService.findExamById(answers.get(0)));
+            scores.setQuestion(questionService.findByExam(scores.getExam()).get(i - 1));
             scores.setAnswer(answers.get(i));
-            scores.setUserId(SecurityUtil.getCurrentUser().getId());
+            scores.setUser(SecurityUtil.getCurrentUser());
 
-            if (!(scoreService.existsByUserIdAndExamIdAndQuestionId(scores.getUserId(), scores.getExamId(), scores.getQuestionId())))
+            if (!(scoreService.existsByUserAndExamAndQuestion(scores.getUser(), scores.getExam(), scores.getQuestion())))
                 scoreService.save(scores);
         }
     }

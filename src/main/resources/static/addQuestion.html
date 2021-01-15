@@ -165,7 +165,7 @@
         let options = new Map();
         console.log("3");
         question.description = document.getElementById("qd").value;
-        question.examId = document.getElementById("myExam").value;
+        var examId = document.getElementById("myExam").value;
         options["1"] = $( "#o1" ).val();
         options["2"] = $( "#o2" ).val();
         options["3"] = $( "#o3" ).val();
@@ -175,13 +175,13 @@
         console.log(JSON.stringify(question));
         question.correct = $('input[name="option"]:checked').val();
 
-        if (question.description == null || question.description === "", question.examId == null || question.examId === "") {
+        if (question.description == null || question.description === "") {
             alert("Please Fill All Required Field");
             return false;
         } else {
             $.ajax({
                 type: "POST",
-                url: "/question/takeQuestion",
+                url: "/question/add/"+examId,
                 data: JSON.stringify(question),
                 dataType: "json",
                 contentType: "application/json",
@@ -191,7 +191,7 @@
     }
 
     function loadForm() {
-        $.get("/exam/available", function (data) {
+        $.get("/exam/myExam", function (data) {
 
             var x = document.getElementById("myExam");
             var option = document.createElement("option");

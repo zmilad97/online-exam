@@ -10,7 +10,8 @@ public class Question {
     @GeneratedValue
     private long id;
     private String description;
-    private long examId;
+    @ManyToOne
+    private Exam exam;
     @ElementCollection
     private Map<String, String> options = new LinkedHashMap<>();
     private int correct;
@@ -32,14 +33,13 @@ public class Question {
         this.description = description;
     }
 
-    public long getExamId() {
-        return examId;
+    public Exam getExam() {
+        return exam;
     }
 
-    public void setExamId(long examId) {
-        this.examId = examId;
+    public void setExam(Exam exam) {
+        this.exam = exam;
     }
-
 
     public Map<String, String> getOptions() {
         return options;
