@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/question")
 public class QuestionController {
 
@@ -19,10 +19,10 @@ public class QuestionController {
         this.examService = examService;
     }
 
-   @GetMapping("/append")
-   public String append(){
-        return "/addQuestion.html";
-   }
+//   @GetMapping("/append")
+//   public String append(){
+//        return "/addQuestion.html";
+//   }
 
     @PostMapping("/add/{examId}")
     public void add(@RequestBody Question question, @PathVariable Long examId){
