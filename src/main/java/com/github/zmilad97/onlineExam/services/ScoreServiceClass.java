@@ -8,7 +8,9 @@ import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ScoreServiceClass {
@@ -46,4 +48,14 @@ public class ScoreServiceClass {
                 scoreService.save(scores);
         }
     }
+
+    public Map<Integer,Long> getUserAnswers(long examId){
+        Map<Integer, Long> results = new HashMap<>();
+        List<Scores> scores = scoreService.findByExam(examService.findExamById(examId));
+        for (int i = 0 ; i < scores.size() ; i++)
+          results.put(i+1,scores.get(i).getAnswer());
+        return results;
+    }
+
+
 }

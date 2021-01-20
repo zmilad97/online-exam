@@ -9,19 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/score/")
 public class ScoreController {
-    private final ScoreService scoreService;
-    private final QuestionService questionService;
     private final ScoreServiceClass scoreServiceClass;
     private final ExamService examService;
 
     @Autowired
-    public ScoreController(ScoreService scoreService, QuestionService questionService, ScoreServiceClass scoreServiceClass, ExamService examService) {
-        this.scoreService = scoreService;
-        this.questionService = questionService;
+    public ScoreController(ScoreServiceClass scoreServiceClass, ExamService examService) {
         this.scoreServiceClass = scoreServiceClass;
         this.examService = examService;
     }
@@ -30,11 +27,11 @@ public class ScoreController {
      * client post their answers to this method
      *
      * @param answers send by user
-     *   answer[0] = examId
+     *                answer[0] = examId
      */
     @PostMapping("take")
     public void takeAnswers(@RequestBody List<Long> answers) {
-      scoreServiceClass.takeAnswers(answers);
+        scoreServiceClass.takeAnswers(answers);
     }
 
     @GetMapping("result")
@@ -42,6 +39,9 @@ public class ScoreController {
         return scoreServiceClass.result(SecurityUtil.getCurrentUser(), examService.findExamById(examId));
     }
 
-
+    @GetMapping("user-answer/{examId}")
+    public Map<Integer, Long> getUserAnswer(@PathVariable Long examId) {
+        return scoreServiceClass.getUserAnswers(examId);
+    }
 
 }

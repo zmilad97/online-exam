@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping("status")
-    public User myStatus(){
+    public User myStatus() {
         return SecurityUtil.getCurrentUser();
     }
 

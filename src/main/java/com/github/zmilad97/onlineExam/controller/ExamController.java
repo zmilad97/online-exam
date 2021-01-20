@@ -17,7 +17,6 @@ public class ExamController {
     private final ExamService examService;
     private final CorrectionService correctionService;
     private final QuestionService questionService;
-    private final UserService userService;
     private final ScoreService scoreService;
     private final UserServiceClass userServiceClass;
 
@@ -26,7 +25,6 @@ public class ExamController {
         this.examService = examService;
         this.correctionService = correctionService;
         this.questionService = questionService;
-        this.userService = userService;
         this.scoreService = scoreService;
         this.userServiceClass = userServiceClass;
     }
@@ -82,7 +80,7 @@ public class ExamController {
     /**
      * this method gives a permission to an exam that specified in path to list of student that sent by MASTER or ADMIN
      *
-     * @param examId it's the permission send by Master
+     * @param examId     it's the permission send by Master
      * @param studentsId list of students
      */
     @PostMapping("{examId}/add-to-exam")
@@ -96,7 +94,7 @@ public class ExamController {
     /**
      * this method allows MASTER or ADMIN to remove a student from an exam
      *
-     * @param examId it's the permission send by Master
+     * @param examId    it's the permission send by Master
      * @param studentId student id
      */
     @PostMapping("{examId}/remove-from-exam")
@@ -152,7 +150,7 @@ public class ExamController {
     }
 
     @GetMapping("all")
-    public List<Exam> allExam(){
+    public List<Exam> allExam() {
         return examService.findAll();
     }
 
