@@ -30,7 +30,7 @@ public class ScoreController {
      * client post their answers to this method
      *
      * @param answers send by user
-     *
+     *   answer[0] = examId
      */
     @PostMapping("take")
     public void takeAnswers(@RequestBody List<Long> answers) {
@@ -41,5 +41,7 @@ public class ScoreController {
     public double result(@RequestBody long examId) {
         return scoreServiceClass.result(SecurityUtil.getCurrentUser(), examService.findExamById(examId));
     }
+
+
 
 }

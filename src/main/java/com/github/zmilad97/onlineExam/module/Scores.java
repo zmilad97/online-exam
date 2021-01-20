@@ -8,6 +8,7 @@ import javax.persistence.*;
 public class Scores {
 
     @Id
+    @GeneratedValue
     private long Id;
 
     @OneToOne
