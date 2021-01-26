@@ -5,6 +5,8 @@ import com.github.zmilad97.onlineExam.module.Question;
 import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import com.github.zmilad97.onlineExam.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,17 +65,16 @@ public class ExamController {
     }
 
     @GetMapping("{examId}")
-    public String getExamTitleById(@PathVariable long examId) {
-        return examService.findExamById(examId).getTitle();
+    public Exam getExamById(@PathVariable long examId) {
+        return examService.findExamById(examId);
     }
 
     @GetMapping("/{examId}/questions")
-    public List<Question> getQuestionsByExamId(@PathVariable long examId) {
-        //TODO : need to check if student participate or not
+    public ResponseEntity<List<Question>> getQuestionsByExamId(@PathVariable long examId) {
         if (scoreService.findByUserAndExam(SecurityUtil.getCurrentUser(), examService.findExamById(examId)) == null)
-            return questionService.findByExam(examService.findExamById(examId));
+            return ResponseEntity.ok(questionService.findByExam(examService.findExamById(examId)));
         else
-            return null;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
@@ -107,9 +108,6 @@ public class ExamController {
     }
 
 
-    //TODO : add a method to get exam and answer
-
-
     //TODO : this method seems not right
     //this method gets the User's answers of a exam in a map structure that has a userId and a examId Key and value
     @PostMapping("answer")
@@ -125,7 +123,7 @@ public class ExamController {
      */
     @GetMapping("category/{categoryName}")
     public List<Exam> getExamsByCategory(@PathVariable String categoryName) {
-        return examService.findByCategory(categoryName);
+        return examService.findByCategoryAndMaker(categoryName,SecurityUtil.getCurrentUser());
     }
 
 
@@ -136,7 +134,7 @@ public class ExamController {
      */
     @GetMapping("grade/{grade}")
     public List<Exam> getExamsByGrade(@PathVariable String grade) {
-        return examService.findByGrade(grade);
+        return examService.findByGradeAndMaker(grade,SecurityUtil.getCurrentUser());
     }
 
     /**
@@ -146,12 +144,7 @@ public class ExamController {
      */
     @GetMapping("search/{title}")
     public List<Exam> searchExam(@PathVariable String title) {
-        return examService.findAllByTitleContains(title);
-    }
-
-    @GetMapping("all")
-    public List<Exam> allExam() {
-        return examService.findAll();
+        return examService.findAllByTitleContainsAndMaker(title,SecurityUtil.getCurrentUser());
     }
 
 }

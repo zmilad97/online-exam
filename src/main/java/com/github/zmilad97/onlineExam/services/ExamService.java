@@ -10,15 +10,19 @@ import java.util.Map;
 
 @Repository
 public interface ExamService extends JpaRepository<Exam, Long> {
-    List<Exam> findByCategory(String category);
+    List<Exam> findByCategoryAndMaker(String category,User maker);
 
-    List<Exam> findByGrade(String grade);
+    List<Exam> findByGradeAndMaker(String grade,User maker);
 
-    List<Exam> findAllByTitleContains(String title);
+    List<Exam> findAllByTitleContainsAndMaker(String title,User maker);
 
     List<Exam> findByMaker(User maker);
 
     Exam findExamById(long id);
 
     List<Exam> findByActiveTrueAndIdIn(List<Long> collect);
+
+    List<Exam> findByCategory(String category);
+    List<Exam> findByGrade (String grade);
+    List<Exam> findByTitleContains (String title);
 }

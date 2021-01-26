@@ -34,8 +34,8 @@ public class ScoreController {
         scoreServiceClass.takeAnswers(answers);
     }
 
-    @GetMapping("result")
-    public double result(@RequestBody long examId) {
+    @GetMapping("result/{examId}")
+    public double result(@PathVariable long examId) {
         return scoreServiceClass.result(SecurityUtil.getCurrentUser(), examService.findExamById(examId));
     }
 

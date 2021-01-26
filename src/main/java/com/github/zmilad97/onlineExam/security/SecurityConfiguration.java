@@ -47,10 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
 
-      /*  web.ignoring().antMatchers("/resources/**")
-                .and().ignoring().antMatchers("/resources/static/**")
-                .and().ignoring().antMatchers("/resources/static")
-                .and().ignoring().antMatchers("/user/init");*/
+
     }
 
     @Override
@@ -71,7 +68,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/exam/add").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/addQuestion.html").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/exam/**/add2exam").hasAnyRole("ADMIN","MASTER")      //TODO :Check Here **
-                .antMatchers("/exam/all").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/index")
