@@ -15,7 +15,7 @@ public class User {
     @Id
     @GeneratedValue
     private long id;
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
     private String password;
@@ -26,7 +26,6 @@ public class User {
     private String roles;
     private String permissions;
     private boolean active;
-
 
 
     public User() {
@@ -102,7 +101,7 @@ public class User {
     }
 
     public void setPermissions(List<String> permissions) {
-        permissions.forEach( p -> this.permissions += p);
+        permissions.forEach(p -> this.permissions += p);
     }
 
     public boolean isActive() {
@@ -119,9 +118,14 @@ public class User {
         }
         return new ArrayList<>();
     }
-    public void addPermission(String permission){
-       this.permissions += "," + permission;
+
+    public void addPermission(String permission) {
+        if (this.permissions != null)
+            this.permissions += "," + permission;
+        else
+            this.permissions = permission;
     }
+
     public List<String> getPermissionList() {
         if (this.permissions.length() > 0) {
             return Arrays.asList(this.permissions.split(","));
