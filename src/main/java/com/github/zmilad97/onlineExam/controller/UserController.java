@@ -4,35 +4,29 @@ import com.github.zmilad97.onlineExam.dbinit.DbInit;
 import com.github.zmilad97.onlineExam.module.User;
 import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import com.github.zmilad97.onlineExam.services.UserService;
+import com.github.zmilad97.onlineExam.services.UserServiceClass;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/user/")
 public class UserController {
-    private UserService userService;
-    private PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final UserServiceClass userServiceClass;
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, UserServiceClass userServiceClass) {
 
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
+        this.userServiceClass = userServiceClass;
     }
 
     @PostMapping("add")
     public void addUser(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setActive(true);
-        user.setPermissions(new ArrayList<>());
-        user.addPermission("user");
-        user.setRoles("USER");
-        userService.save(user);
+        userServiceClass.addUser(user);
     }
 
     @GetMapping("names")
@@ -55,9 +49,7 @@ public class UserController {
 
     @GetMapping("init")
     public String init() {
-        DbInit dbInit = new DbInit(passwordEncoder);
-        User user = dbInit.initUser();
-        userService.save(user);
+        userService.save(DbInit.initUser());
         return "init User Done";
     }
 

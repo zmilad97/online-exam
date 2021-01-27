@@ -101,7 +101,8 @@ public class User {
     }
 
     public void setPermissions(List<String> permissions) {
-        permissions.forEach(p -> this.permissions += p);
+        this.permissions ="";
+        permissions.forEach(p -> this.permissions += p + ",");
     }
 
     public boolean isActive() {

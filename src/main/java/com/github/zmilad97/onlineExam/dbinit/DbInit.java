@@ -6,13 +6,9 @@ import com.github.zmilad97.onlineExam.module.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class DbInit {
-    private PasswordEncoder passwordEncoder;
+    static PasswordEncoder passwordEncoder;
 
-    public DbInit(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    public User initUser() {
+    public static User initUser() {
         User user = new User();
         user.setUsername("admin");
         user.setName("Milad Zaeri");
