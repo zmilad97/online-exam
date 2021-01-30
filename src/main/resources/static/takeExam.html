@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 <title>Online Exam Service | Make Exam Page</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -177,7 +177,6 @@
         answers[0] =window.location.search.substring(1);
         for (var i = 0 ; i <5;i++ )
             answers[i+1] = $('input[name="option' + i + '"]:checked').val();
-        //TODO:Fix here
         $.ajax({
             type: "POST",
             url: "/score/take",

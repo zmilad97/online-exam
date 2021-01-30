@@ -1,7 +1,6 @@
 package com.github.zmilad97.onlineExam.security;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -67,7 +66,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/question/add").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/exam/add").hasAnyRole("ADMIN","MASTER")
                 .antMatchers("/addQuestion.html").hasAnyRole("ADMIN","MASTER")
-                .antMatchers("/exam/**/add2exam").hasAnyRole("ADMIN","MASTER")      //TODO :Check Here **
+                .antMatchers("/exam/**/add2exam").hasAnyRole("ADMIN","MASTER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/index")
