@@ -8,7 +8,6 @@ import com.github.zmilad97.onlineExam.services.UserServiceClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.PublicKey;
 import java.util.List;
 
 @RestController
