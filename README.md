@@ -21,7 +21,7 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 ./mvnw spring-boot:run
 ```
 
-## In case you find a bug/suggested improvement for Spring Petclinic
+## In case you find a bug/suggested improvement for Online-Exam
 Our issue tracker is available here: https://github.com/zmilad97/online-exam/issues
 
 
