@@ -27,8 +27,8 @@ Our issue tracker is available here: https://github.com/zmilad97/online-exam/iss
 
 ## Database configuration
 
-In its default configuration, online-exam uses a MySql database which you must
-create on your own in database .Make a get call to /user/init to initiate Admin user for the first time
+In its default configuration, online-exam uses a MySql database on 3306 port which you must
+create on your own and name it online-test.Make a get call to /user/init to initiate Admin user for the first time
 You could start MySql locally with whatever installer works for your OS
 
 
