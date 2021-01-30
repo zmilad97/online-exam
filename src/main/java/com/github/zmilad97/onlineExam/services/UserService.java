@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface UserService extends JpaRepository<User, Long> {
 
     User findByUsername(String username);
-    User findUserById(Long id);
-    void deleteById(Long id);
+    User findUserById(long id);
+    void deleteById(long id);
 
 }

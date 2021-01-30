@@ -63,10 +63,10 @@ class UserServiceClassTest {
     @Sql("classpath:test-data.sql")
     @DisplayName("this method should set a role to a saved user ")
     public void givenUserId_andRole_whenSetToTheUser_thenGetOk() {
-        User user = userService.findUserById((long) 1);
+        User user = userService.findUserById( 1);
         user.setRoles("User");
         userService.save(user);
-        assertThat(userService.findUserById((long) 1).getRoles().equals("User"));
+        assertThat(userService.findUserById( 1).getRoles().equals("User"));
     }
 
     @Test
@@ -74,12 +74,13 @@ class UserServiceClassTest {
     @DisplayName("this method remove specific permission from user")
     public void givenUserId_andPermission_whenRemoveFromUser_thenGetOk() {
         String permission = "user";
-        List<String> permissionList = new ArrayList<>(userService.findUserById((long) 1).getPermissionList());
+        List<String> permissionList = new ArrayList<>(userService.findUserById( 1).getPermissionList());
         permissionList.remove(permission);
-        userService.findUserById((long) 1).setPermissions(permissionList);
-        userService.save(userService.findUserById((long) 1));
-        assertThat(userService.findUserById((long) 1).getPermissionList().contains("user")).isFalse();
+        userService.findUserById(1).setPermissions(permissionList);
+        userService.save(userService.findUserById( 1));
+        assertThat(userService.findUserById( 1).getPermissionList().contains("user")).isFalse();
     }
+
 
     @Test
     @Sql("classpath:test-data.sql")

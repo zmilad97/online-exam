@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/score/")
@@ -24,12 +25,11 @@ public class ScoreController {
     /**
      * client post their answers to this method
      *
-     * @param answers send by user
-     *                answer[0] = examId
+     * @param answers <questionId,userAnswer>
      */
-    @PostMapping("take")
-    public void takeAnswers(@RequestBody List<Long> answers) {
-        scoreServiceClass.takeAnswers(answers);
+    @PostMapping("take/{examId}")
+    public void takeAnswers(@RequestBody Map<Long,Long> answers, @PathVariable long examId) {
+        scoreServiceClass.takeAnswers(answers,examId);
     }
 
     @GetMapping("result/{examId}")

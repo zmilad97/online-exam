@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ScoreServiceClass {
@@ -36,19 +37,27 @@ public class ScoreServiceClass {
         return score;
     }
 
-    public void takeAnswers(List<Long> answers) {
-        for (int i = 1; i < answers.size(); i++) {
+    public void takeAnswers(Map<Long,Long> answers,long examId) {
+        for(Map.Entry<Long,Long> entry :answers.entrySet())
+        {
             Scores scores = new Scores();
-            scores.setExam(examService.findExamById(answers.get(0)));
-            scores.setQuestion(questionService.findByExam(scores.getExam()).get(i - 1));
-            scores.setAnswer(answers.get(i));
+            scores.setExam(examService.findExamById(examId));
+            scores.setQuestion(questionService.findQuestionById(entry.getKey()));
+            scores.setAnswer(entry.getValue());
             scores.setUser(SecurityUtil.getCurrentUser());
 
             if (!(scoreService.existsByUserAndExamAndQuestion(scores.getUser(), scores.getExam(), scores.getQuestion())))
                 scoreService.save(scores);
+
         }
+
     }
 
+    /**
+     * this method return List of user's scores of specific exam to the MASTER or ADMIn
+     * @param examId send by MASTER or ADMIN
+     * @return scores
+     */
 
     public List<Scores> getUsersScores(long examId) {
         List<Scores> scores = new ArrayList<>();
