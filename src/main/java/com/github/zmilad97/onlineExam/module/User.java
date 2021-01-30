@@ -20,7 +20,7 @@ public class User {
     @Column(nullable = false)
     private String password;
     private String name;
-    private String birthDate;
+    private String birthdate;
     private String email;
     private Gender gender;
     private String roles;
@@ -64,12 +64,12 @@ public class User {
         this.name = name;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthdate(String birthDate) {
+        this.birthdate = birthDate;
     }
 
     public String getEmail() {
@@ -101,7 +101,7 @@ public class User {
     }
 
     public void setPermissions(List<String> permissions) {
-        this.permissions ="";
+        this.permissions = "";
         permissions.forEach(p -> this.permissions += p + ",");
     }
 

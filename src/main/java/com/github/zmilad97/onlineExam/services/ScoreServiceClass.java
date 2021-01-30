@@ -8,9 +8,8 @@ import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ScoreServiceClass {
@@ -28,15 +27,16 @@ public class ScoreServiceClass {
     public double result(User user, Exam exam) {
         List<Question> questions = questionService.findByExam(exam);
         double score = 0;
-        for (Question question : questions) {if (
-            scoreService.findByUserAndExamAndQuestion(user, exam, question).getAnswer()
-               ==   questionService.findQuestionById(question.getId()).getCorrect())
-           score++;
+        for (Question question : questions) {
+            if (
+                    scoreService.findByUserAndExamAndQuestion(user, exam, question).getAnswer()
+                            == questionService.findQuestionById(question.getId()).getCorrect())
+                score++;
         }
         return score;
     }
 
-    public void takeAnswers(List<Long> answers){
+    public void takeAnswers(List<Long> answers) {
         for (int i = 1; i < answers.size(); i++) {
             Scores scores = new Scores();
             scores.setExam(examService.findExamById(answers.get(0)));
@@ -49,12 +49,14 @@ public class ScoreServiceClass {
         }
     }
 
-    public Map<Integer,Long> getUserAnswers(long examId){
-        Map<Integer, Long> results = new HashMap<>();
-        List<Scores> scores = scoreService.findByExam(examService.findExamById(examId));
-        for (int i = 0 ; i < scores.size() ; i++)
-          results.put(i+1,scores.get(i).getAnswer());
-        return results;
+
+    public List<Scores> getUsersScores(long examId) {
+        List<Scores> scores = new ArrayList<>();
+        if (examService.findExamById(examId).getMaker().equals(SecurityUtil.getCurrentUser())
+                || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
+            scores = scoreService.findByExam(examService.findExamById(examId));
+
+        return scores;
     }
 
 

@@ -10,22 +10,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/exam/")
 public class ExamController {
     private final ExamService examService;
-    private final CorrectionService correctionService;
     private final QuestionService questionService;
     private final ScoreService scoreService;
     private final UserServiceClass userServiceClass;
 
     @Autowired
-    public ExamController(ExamService examService, CorrectionService correctionService, QuestionService questionService, UserService userService, ScoreService scoreService, UserServiceClass userServiceClass) {
+    public ExamController(ExamService examService, QuestionService questionService, UserService userService, ScoreService scoreService, UserServiceClass userServiceClass) {
         this.examService = examService;
-        this.correctionService = correctionService;
         this.questionService = questionService;
         this.scoreService = scoreService;
         this.userServiceClass = userServiceClass;
@@ -108,12 +105,6 @@ public class ExamController {
     }
 
 
-    //TODO : this method seems not right
-    //this method gets the User's answers of a exam in a map structure that has a userId and a examId Key and value
-    @PostMapping("answer")
-    public void takeAnswers(@RequestBody Map<String, String> answer) {
-        correctionService.correction(answer);
-    }
 
 
     /**

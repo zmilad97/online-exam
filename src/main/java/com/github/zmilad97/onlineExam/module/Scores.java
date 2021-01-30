@@ -4,7 +4,6 @@ package com.github.zmilad97.onlineExam.module;
 import javax.persistence.*;
 
 @Entity
-//@IdClass(ScoresIdClass.class)
 public class Scores {
 
     @Id

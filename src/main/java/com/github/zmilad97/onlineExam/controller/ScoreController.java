@@ -1,15 +1,13 @@
 package com.github.zmilad97.onlineExam.controller;
 
+import com.github.zmilad97.onlineExam.module.Scores;
 import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import com.github.zmilad97.onlineExam.services.ExamService;
-import com.github.zmilad97.onlineExam.services.QuestionService;
-import com.github.zmilad97.onlineExam.services.ScoreService;
 import com.github.zmilad97.onlineExam.services.ScoreServiceClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/score/")
@@ -39,9 +37,15 @@ public class ScoreController {
         return scoreServiceClass.result(SecurityUtil.getCurrentUser(), examService.findExamById(examId));
     }
 
-    @GetMapping("user-answer/{examId}")
-    public Map<Integer, Long> getUserAnswer(@PathVariable Long examId) {
-        return scoreServiceClass.getUserAnswers(examId);
+    /**
+     * this method returns user Scores of an exam
+     * @param examId send by Master or Admin
+     * @return list of Scores
+     */
+
+    @GetMapping("user-scores/{examId}")
+    public List<Scores> getUserAnswer(@PathVariable Long examId) {
+        return scoreServiceClass.getUsersScores(examId);
     }
 
 }
