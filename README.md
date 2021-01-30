@@ -1,4 +1,3 @@
-# online-exam
 ## Online Exam API
 
 ## Running online-exam localy
