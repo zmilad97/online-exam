@@ -1,6 +1,5 @@
 package com.github.zmilad97.onlineExam.controller;
 
-import com.github.zmilad97.onlineExam.dbinit.DbInit;
 import com.github.zmilad97.onlineExam.module.User;
 import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import com.github.zmilad97.onlineExam.services.UserService;
@@ -47,10 +46,5 @@ public class UserController {
         return SecurityUtil.getCurrentUser();
     }
 
-    @GetMapping("init")
-    public String init() {
-        userService.save(DbInit.initUser());
-        return "init User Done";
-    }
 
 }
