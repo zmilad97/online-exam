@@ -35,6 +35,10 @@ public class UserController {
         return users;
     }
 
+    @PostMapping("update")
+    public void update(@RequestBody User user){
+        userService.updateUser(user);
+    }
 
     @DeleteMapping("remove/{id}")
     public void removeUserById(@PathVariable long id) {
