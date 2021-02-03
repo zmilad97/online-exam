@@ -28,7 +28,7 @@ public class OnlineExamStarter implements ApplicationRunner {
      */
     @Override
     public void run(ApplicationArguments args) {
-        if (userRepository.findUserById(0) == null)
+        if (userRepository.findUserById(1) == null)
             userRepository.save(adminUser());
     }
 
