@@ -89,8 +89,9 @@ class UserServiceTest {
     public void givenUserIdList_andPermission_whenAdded_thenOk() {
         List<Long> studentsId = Collections.singletonList((long) 1);
         String permission = "test";
-        studentsId.forEach(id -> userRepository.findUserById(id).addPermission(permission));
-        studentsId.forEach(id -> userRepository.save(userRepository.findUserById(id)));
+        List<User> users = userRepository.findAllById(studentsId);
+        users.forEach(user -> user.addPermission(permission));
+        userRepository.saveAll(users);
         for (Long aLong : studentsId)
             assertThat(userRepository.findUserById(aLong).getPermissionList()).contains("test");
     }
