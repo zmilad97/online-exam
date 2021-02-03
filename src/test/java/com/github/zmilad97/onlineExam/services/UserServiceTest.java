@@ -99,7 +99,7 @@ class UserServiceTest {
 
     @Test
     @Sql("classpath:test-data.sql")
-    public void testsql(){
+    public void testSql(){
         User test = userRepository.findByUsername("admin");
         assertThat(test).isNotNull();
     }
