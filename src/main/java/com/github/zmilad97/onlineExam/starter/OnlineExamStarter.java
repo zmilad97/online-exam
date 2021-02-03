@@ -12,18 +12,19 @@ import org.springframework.stereotype.Component;
 public class OnlineExamStarter implements ApplicationRunner {
 
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public OnlineExamStarter(UserRepository userRepository) {
+    public OnlineExamStarter(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
      * this method runs at service startup and checks
      * whether the database has the admin user or not
      * if not save admin user in database
-     * id = 0 -----> admin
+     * id = 1 -----> admin
      */
     @Override
     public void run(ApplicationArguments args) {
@@ -34,7 +35,7 @@ public class OnlineExamStarter implements ApplicationRunner {
 
     public User adminUser() {
         User user = new User();
-        user.setId(0);
+        user.setId(1);
         user.setUsername("admin");
         user.setName("Milad Zaeri");
         user.setPassword(passwordEncoder.encode("milad"));
