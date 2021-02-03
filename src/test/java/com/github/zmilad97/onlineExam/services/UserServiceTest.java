@@ -1,6 +1,7 @@
 package com.github.zmilad97.onlineExam.services;
 
 import com.github.zmilad97.onlineExam.module.User;
+import com.github.zmilad97.onlineExam.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 
-class UserServiceClassTest {
+class UserServiceTest {
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -54,8 +55,8 @@ class UserServiceClassTest {
         user.addPermission("master");
         user.setRoles("ADMIN");
         user.setActive(true);
-        userService.save(user);
-        User savedUser = userService.findByUsername("admin");
+        userRepository.save(user);
+        User savedUser = userRepository.findByUsername("admin");
         assertThat(savedUser).usingRecursiveComparison().ignoringFields("id").isEqualTo(user);
     }
 
@@ -63,10 +64,10 @@ class UserServiceClassTest {
     @Sql("classpath:test-data.sql")
     @DisplayName("this method should set a role to a saved user ")
     public void givenUserId_andRole_whenSetToTheUser_thenGetOk() {
-        User user = userService.findUserById( 1);
+        User user = userRepository.findUserById( 1);
         user.setRoles("User");
-        userService.save(user);
-        assertThat(userService.findUserById( 1).getRoles().equals("User"));
+        userRepository.save(user);
+        assertThat(userRepository.findUserById( 1).getRoles().equals("User"));
     }
 
     @Test
@@ -74,11 +75,11 @@ class UserServiceClassTest {
     @DisplayName("this method remove specific permission from user")
     public void givenUserId_andPermission_whenRemoveFromUser_thenGetOk() {
         String permission = "user";
-        List<String> permissionList = new ArrayList<>(userService.findUserById( 1).getPermissionList());
+        List<String> permissionList = new ArrayList<>(userRepository.findUserById( 1).getPermissionList());
         permissionList.remove(permission);
-        userService.findUserById(1).setPermissions(permissionList);
-        userService.save(userService.findUserById( 1));
-        assertThat(userService.findUserById( 1).getPermissionList().contains("user")).isFalse();
+        userRepository.findUserById(1).setPermissions(permissionList);
+        userRepository.save(userRepository.findUserById( 1));
+        assertThat(userRepository.findUserById( 1).getPermissionList().contains("user")).isFalse();
     }
 
 
@@ -88,17 +89,17 @@ class UserServiceClassTest {
     public void givenUserIdList_andPermission_whenAdded_thenOk() {
         List<Long> studentsId = Collections.singletonList((long) 1);
         String permission = "test";
-        studentsId.forEach(id -> userService.findUserById(id).addPermission(permission));
-        studentsId.forEach(id -> userService.save(userService.findUserById(id)));
-        for(int i = 0 ; i < studentsId.size() ; i++)
-        assertThat(userService.findUserById(studentsId.get(i)).getPermissionList()).contains("test") ;
+        studentsId.forEach(id -> userRepository.findUserById(id).addPermission(permission));
+        studentsId.forEach(id -> userRepository.save(userRepository.findUserById(id)));
+        for (Long aLong : studentsId)
+            assertThat(userRepository.findUserById(aLong).getPermissionList()).contains("test");
     }
 
 
     @Test
     @Sql("classpath:test-data.sql")
     public void testsql(){
-        User test = userService.findByUsername("admin");
+        User test = userRepository.findByUsername("admin");
         assertThat(test).isNotNull();
     }
 }

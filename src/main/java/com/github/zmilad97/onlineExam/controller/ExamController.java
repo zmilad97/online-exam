@@ -2,6 +2,10 @@ package com.github.zmilad97.onlineExam.controller;
 
 import com.github.zmilad97.onlineExam.module.Exam;
 import com.github.zmilad97.onlineExam.module.Question;
+import com.github.zmilad97.onlineExam.repository.ExamRepository;
+import com.github.zmilad97.onlineExam.repository.QuestionRepository;
+import com.github.zmilad97.onlineExam.repository.ScoreRepository;
+import com.github.zmilad97.onlineExam.repository.UserRepository;
 import com.github.zmilad97.onlineExam.security.SecurityUtil;
 import com.github.zmilad97.onlineExam.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +19,17 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/exam/")
 public class ExamController {
-    private final ExamService examService;
-    private final QuestionService questionService;
-    private final ScoreService scoreService;
-    private final UserServiceClass userServiceClass;
+    private final ExamRepository examRepository;
+    private final QuestionRepository questionRepository;
+    private final ScoreRepository scoreRepository;
+    private final UserService userService;
 
     @Autowired
-    public ExamController(ExamService examService, QuestionService questionService, UserService userService, ScoreService scoreService, UserServiceClass userServiceClass) {
-        this.examService = examService;
-        this.questionService = questionService;
-        this.scoreService = scoreService;
-        this.userServiceClass = userServiceClass;
+    public ExamController(ExamRepository examRepository, QuestionRepository questionRepository, UserRepository userRepository, ScoreRepository scoreRepository, UserService userService) {
+        this.examRepository = examRepository;
+        this.questionRepository = questionRepository;
+        this.scoreRepository = scoreRepository;
+        this.userService = userService;
     }
 
     /**
@@ -37,7 +41,7 @@ public class ExamController {
     public void addExam(@RequestBody Exam exam) {
         exam.setMaker(SecurityUtil.getCurrentUser());
         exam.setActive(true);
-        examService.save(exam);
+        examRepository.save(exam);
     }
 
     /**
@@ -47,7 +51,7 @@ public class ExamController {
      */
     @GetMapping("myExam")
     public List<Exam> myExam() {
-        return examService.findByMaker(SecurityUtil.getCurrentUser());
+        return examRepository.findByMaker(SecurityUtil.getCurrentUser());
     }
 
     /**
@@ -57,19 +61,19 @@ public class ExamController {
      */
     @GetMapping("available")
     public List<Exam> availableExams() {
-        return examService.findByActiveTrueAndIdIn(SecurityUtil.getCurrentUser().getPermissionList()
+        return examRepository.findByActiveTrueAndIdIn(SecurityUtil.getCurrentUser().getPermissionList()
                 .stream().map(Long::parseLong).collect(Collectors.toList()));
     }
 
     @GetMapping("{examId}")
     public Exam getExamById(@PathVariable long examId) {
-        return examService.findExamById(examId);
+        return examRepository.findExamById(examId);
     }
 
     @GetMapping("/{examId}/questions")
     public ResponseEntity<List<Question>> getQuestionsByExamId(@PathVariable long examId) {
-        if (scoreService.findByUserAndExam(SecurityUtil.getCurrentUser(), examService.findExamById(examId)) == null)
-            return ResponseEntity.ok(questionService.findByExam(examService.findExamById(examId)));
+        if (scoreRepository.findByUserAndExam(SecurityUtil.getCurrentUser(), examRepository.findExamById(examId)) == null)
+            return ResponseEntity.ok(questionRepository.findByExam(examRepository.findExamById(examId)));
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -84,9 +88,9 @@ public class ExamController {
     @PostMapping("{examId}/add-to-exam")
     public void givePermissionToStudent(@RequestBody List<Long> studentsId, @PathVariable long examId) {
 
-        if (examService.findExamById(examId).getMaker() == SecurityUtil.getCurrentUser()
+        if (examRepository.findExamById(examId).getMaker() == SecurityUtil.getCurrentUser()
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
-            userServiceClass.givePermission(studentsId, String.valueOf(examId));
+            userService.givePermission(studentsId, String.valueOf(examId));
     }
 
     /**
@@ -98,10 +102,10 @@ public class ExamController {
     @PostMapping("{examId}/remove-from-exam")
     public void takePermission(@RequestBody Long studentId, @PathVariable long examId) {
 
-        if (examService.findExamById(examId).getMaker() == SecurityUtil.getCurrentUser()
+        if (examRepository.findExamById(examId).getMaker() == SecurityUtil.getCurrentUser()
                 || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
 
-            userServiceClass.takePermission(studentId, String.valueOf(examId));
+            userService.takePermission(studentId, String.valueOf(examId));
     }
 
 
@@ -114,7 +118,7 @@ public class ExamController {
      */
     @GetMapping("category/{categoryName}")
     public List<Exam> getExamsByCategory(@PathVariable String categoryName) {
-        return examService.findByCategoryAndMaker(categoryName,SecurityUtil.getCurrentUser());
+        return examRepository.findByCategoryAndMaker(categoryName,SecurityUtil.getCurrentUser());
     }
 
 
@@ -125,7 +129,7 @@ public class ExamController {
      */
     @GetMapping("grade/{grade}")
     public List<Exam> getExamsByGrade(@PathVariable String grade) {
-        return examService.findByGradeAndMaker(grade,SecurityUtil.getCurrentUser());
+        return examRepository.findByGradeAndMaker(grade,SecurityUtil.getCurrentUser());
     }
 
     /**
@@ -135,7 +139,7 @@ public class ExamController {
      */
     @GetMapping("search/{title}")
     public List<Exam> searchExam(@PathVariable String title) {
-        return examService.findAllByTitleContainsAndMaker(title,SecurityUtil.getCurrentUser());
+        return examRepository.findAllByTitleContainsAndMaker(title,SecurityUtil.getCurrentUser());
     }
 
 }

@@ -2,8 +2,8 @@ package com.github.zmilad97.onlineExam.controller;
 
 import com.github.zmilad97.onlineExam.module.Scores;
 import com.github.zmilad97.onlineExam.security.SecurityUtil;
-import com.github.zmilad97.onlineExam.services.ExamService;
-import com.github.zmilad97.onlineExam.services.ScoreServiceClass;
+import com.github.zmilad97.onlineExam.repository.ExamRepository;
+import com.github.zmilad97.onlineExam.services.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +13,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/score/")
 public class ScoreController {
-    private final ScoreServiceClass scoreServiceClass;
-    private final ExamService examService;
+    private final ScoreService scoreService;
+    private final ExamRepository examRepository;
 
     @Autowired
-    public ScoreController(ScoreServiceClass scoreServiceClass, ExamService examService) {
-        this.scoreServiceClass = scoreServiceClass;
-        this.examService = examService;
+    public ScoreController(ScoreService scoreService, ExamRepository examRepository) {
+        this.scoreService = scoreService;
+        this.examRepository = examRepository;
     }
 
     /**
@@ -29,12 +29,12 @@ public class ScoreController {
      */
     @PostMapping("take/{examId}")
     public void takeAnswers(@RequestBody Map<Long,Long> answers, @PathVariable long examId) {
-        scoreServiceClass.takeAnswers(answers,examId);
+        scoreService.takeAnswers(answers,examId);
     }
 
     @GetMapping("result/{examId}")
     public double result(@PathVariable long examId) {
-        return scoreServiceClass.result(SecurityUtil.getCurrentUser(), examService.findExamById(examId));
+        return scoreService.result(SecurityUtil.getCurrentUser(), examRepository.findExamById(examId));
     }
 
     /**
@@ -45,7 +45,7 @@ public class ScoreController {
 
     @GetMapping("user-scores/{examId}")
     public List<Scores> getUserAnswer(@PathVariable Long examId) {
-        return scoreServiceClass.getUsersScores(examId);
+        return scoreService.getUsersScores(examId);
     }
 
 }

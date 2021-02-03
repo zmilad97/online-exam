@@ -1,4 +1,4 @@
-package com.github.zmilad97.onlineExam.services;
+package com.github.zmilad97.onlineExam.repository;
 
 import com.github.zmilad97.onlineExam.module.Exam;
 import com.github.zmilad97.onlineExam.module.User;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public interface ExamService extends JpaRepository<Exam, Long> {
+public interface ExamRepository extends JpaRepository<Exam, Long> {
     List<Exam> findByCategoryAndMaker(String category,User maker);
 
     List<Exam> findByGradeAndMaker(String grade,User maker);

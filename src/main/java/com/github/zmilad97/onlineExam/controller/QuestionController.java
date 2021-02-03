@@ -1,8 +1,8 @@
 package com.github.zmilad97.onlineExam.controller;
 
 import com.github.zmilad97.onlineExam.module.Question;
-import com.github.zmilad97.onlineExam.services.ExamService;
-import com.github.zmilad97.onlineExam.services.QuestionService;
+import com.github.zmilad97.onlineExam.repository.ExamRepository;
+import com.github.zmilad97.onlineExam.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/question")
 public class QuestionController {
 
-    private final QuestionService questionService;
-    private final ExamService examService;
+    private final QuestionRepository questionRepository;
+    private final ExamRepository examRepository;
 
     @Autowired
-    public QuestionController(QuestionService questionService, ExamService examService) {
-        this.questionService = questionService;
-        this.examService = examService;
+    public QuestionController(QuestionRepository questionRepository, ExamRepository examRepository) {
+        this.questionRepository = questionRepository;
+        this.examRepository = examRepository;
     }
 
     @PostMapping("/add/{examId}")
     public void add(@RequestBody Question question, @PathVariable Long examId) {
-        question.setExam(examService.findExamById(examId));
-        questionService.save(question);
+        question.setExam(examRepository.findExamById(examId));
+        questionRepository.save(question);
     }
 
 

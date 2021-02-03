@@ -1,7 +1,7 @@
 package com.github.zmilad97.onlineExam.starter;
 
 import com.github.zmilad97.onlineExam.module.User;
-import com.github.zmilad97.onlineExam.services.UserService;
+import com.github.zmilad97.onlineExam.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class OnlineExamStarter implements ApplicationRunner {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public OnlineExamStarter(UserService userService) {
-        this.userService = userService;
+    public OnlineExamStarter(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     /**
@@ -27,8 +27,8 @@ public class OnlineExamStarter implements ApplicationRunner {
      */
     @Override
     public void run(ApplicationArguments args) {
-        if (userService.findUserById(0) == null)
-            userService.save(adminUser());
+        if (userRepository.findUserById(0) == null)
+            userRepository.save(adminUser());
     }
 
 

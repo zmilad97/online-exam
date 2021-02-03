@@ -2,9 +2,9 @@ package com.github.zmilad97.onlineExam.controller;
 
 import com.github.zmilad97.onlineExam.module.Exam;
 import com.github.zmilad97.onlineExam.module.User;
-import com.github.zmilad97.onlineExam.services.ExamService;
+import com.github.zmilad97.onlineExam.repository.ExamRepository;
+import com.github.zmilad97.onlineExam.repository.UserRepository;
 import com.github.zmilad97.onlineExam.services.UserService;
-import com.github.zmilad97.onlineExam.services.UserServiceClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +13,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/")
 public class AdminController {
+    private final UserRepository userRepository;
     private final UserService userService;
-    private final UserServiceClass userServiceClass;
-    private final ExamService examService;
+    private final ExamRepository examRepository;
 
     @Autowired
-    public AdminController(UserService userService, UserServiceClass userServiceClass, ExamService examService) {
+    public AdminController(UserRepository userRepository, UserService userService, ExamRepository examRepository) {
+        this.userRepository = userRepository;
         this.userService = userService;
-        this.userServiceClass = userServiceClass;
-        this.examService = examService;
+        this.examRepository = examRepository;
     }
 
     /**
@@ -32,7 +32,7 @@ public class AdminController {
      */
     @PostMapping("give-role/{userId}")
     public void giveRole(@PathVariable long userId, @RequestBody String role) {
-        userServiceClass.setRole(userId, role);
+        userService.setRole(userId, role);
     }
 
     /**
@@ -43,12 +43,12 @@ public class AdminController {
      */
     @PostMapping("take-permission/{userId}")
     public void takePermission(@PathVariable long userId, @RequestBody String permission) {
-        userServiceClass.takePermission(userId, permission);
+        userService.takePermission(userId, permission);
     }
 
     @GetMapping("all-users")
     public List<User> getAllUsers() {
-        return userService.findAll();
+        return userRepository.findAll();
     }
 
     /**
@@ -58,8 +58,8 @@ public class AdminController {
      * @return User
      */
     @GetMapping("find-user/{userId}")
-    public User findUserById(@PathVariable String userId) {
-        return userService.findUserById(Long.valueOf(userId));
+    public User findUserById(@PathVariable long userId) {
+        return userRepository.findUserById(userId);
     }
 
     /**
@@ -69,27 +69,27 @@ public class AdminController {
 
     @GetMapping("exam/all")
     public List<Exam> allExam() {
-        return examService.findAll();
+        return examRepository.findAll();
     }
 
     @GetMapping("exam/grade/{grade}")
     public List<Exam> getExamByGrade(@PathVariable String grade){
-        return examService.findByGrade(grade);
+        return examRepository.findByGrade(grade);
     }
 
     @GetMapping("exam/category/{category}")
     public List<Exam> getExamByCategory(@PathVariable String category){
-        return examService.findByCategory(category);
+        return examRepository.findByCategory(category);
     }
 
     @GetMapping("exam/title/{title}")
     public List<Exam> getExamByTitle(@PathVariable String title){
-        return examService.findByGrade(title);
+        return examRepository.findByGrade(title);
     }
 
     @GetMapping("exam/maker/{makerId}")
     public List<Exam> getExamByMaker(@PathVariable Long makerId){
-        return examService.findByMaker(userService.findUserById(makerId));
+        return examRepository.findByMaker(userRepository.findUserById(makerId));
     }
 
 
