@@ -8,6 +8,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+
 @Component
 public class OnlineExamStarter implements ApplicationRunner {
 
@@ -42,7 +44,7 @@ public class OnlineExamStarter implements ApplicationRunner {
         user.setBirthdate("1997");
         user.setEmail("admin@gmail.com");
         user.setGender(User.Gender.MALE);
-        user.addPermission("admin");
+        user.setPermissions(Collections.singletonList("admin"));
         user.setRoles("ADMIN");
         user.setActive(true);
         return user;
