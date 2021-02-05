@@ -37,10 +37,10 @@ public class OnlineExamStarter implements ApplicationRunner {
         User user = new User();
         user.setId(1);
         user.setUsername("admin");
-        user.setName("Milad Zaeri");
-        user.setPassword(passwordEncoder.encode("milad"));
+        user.setName("admin admin");
+        user.setPassword(passwordEncoder.encode("admin"));
         user.setBirthdate("1997");
-        user.setEmail("zmilad97@gmail.com");
+        user.setEmail("admin@gmail.com");
         user.setGender(User.Gender.MALE);
         user.addPermission("admin");
         user.setRoles("ADMIN");
