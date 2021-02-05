@@ -55,17 +55,17 @@ public class UserService {
             User currentUser = SecurityUtil.getCurrentUser();
             if (!(user.getPassword().isEmpty()))
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
-            if (user.getPassword().isEmpty())
+            if (user.getPassword()==null ||user.getPassword().isEmpty())
                 user.setPassword(currentUser.getPassword());
-            if (user.getName().isEmpty())
+            if (user.getName()==null||user.getName().isEmpty())
                 user.setName(currentUser.getName());
-            if (user.getBirthdate().isEmpty())
+            if (user.getBirthdate() == null||user.getBirthdate().isEmpty())
                 user.setBirthdate(currentUser.getBirthdate());
-            if (user.getEmail().isEmpty())
+            if (user.getEmail()==null||user.getEmail().isEmpty())
                 user.setEmail(currentUser.getEmail());
-            if (user.getPermissionList().isEmpty())
+            if (user.getPermissions()==null||user.getPermissionList().isEmpty())
                 user.setPermissions(currentUser.getPermissionList());
-            if (user.getRoles().isEmpty())
+            if (user.getRoles()==null||user.getRoles().isEmpty())
                 user.setRoles(currentUser.getRoles());
             user.setUsername(currentUser.getUsername());
             user.setId(currentUser.getId());
