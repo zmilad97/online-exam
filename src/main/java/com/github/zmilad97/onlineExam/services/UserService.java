@@ -21,14 +21,14 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void addUser(User user){
-        if(!(userRepository.existsById(user.getId()))){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setActive(true);
-        user.setPermissions(new ArrayList<>());
-        user.addPermission("user");
-        user.setRoles("USER");
-        userRepository.save(user);
+    public void addUser(User user) {
+        if (!(userRepository.existsById(user.getId()))) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setActive(true);
+            user.setPermissions(new ArrayList<>());
+            user.addPermission("user");
+            user.setRoles("USER");
+            userRepository.save(user);
         }
     }
 
@@ -50,9 +50,11 @@ public class UserService {
         userRepository.saveAll(users);
     }
 
-    public void updateUser(User user){
-        if(SecurityUtil.getCurrentUser().getId() == user.getId() || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN"))
+    public void updateUser(User user) {
+        if (SecurityUtil.getCurrentUser().getId() == user.getId() || SecurityUtil.getCurrentUser().getRoles().equals("ADMIN")) {
+            user.setId(SecurityUtil.getCurrentUser().getId());
             userRepository.save(user);
+        }
     }
 
 
